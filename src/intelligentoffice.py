@@ -54,12 +54,22 @@ class IntelligentOffice:
         self.buzzer_on = False
 
     def check_quadrant_occupancy(self, pin: int) -> bool:
-        # To be implemented
-        pass
+        if pin in [self.INFRARED_PIN1, self.INFRARED_PIN2, self.INFRARED_PIN3, self.INFRARED_PIN4]:
+            return GPIO.input(pin)
+        else:
+            raise IntelligentOfficeError()
+
 
     def manage_blinds_based_on_time(self) -> None:
-        # To be implemented
-        pass
+        current_time = self.rtc.read_datetime()
+        if current_time.weekday() < 5 and 8 <= current_time.hour < 18:  # weekdays from 8 to 18
+            if not self.blinds_open:
+                self.change_servo_angle(12.0)
+                self.blinds_open = True
+        else:
+            if self.blinds_open:
+                self.change_servo_angle(2.0)
+                self.blinds_open = False
 
     def manage_light_level(self) -> None:
         # To be implemented
