@@ -7,6 +7,7 @@ from mock.adafruit_veml7700 import VEML7700
 from src.intelligentoffice import IntelligentOffice, IntelligentOfficeError
 
 
+
 class TestIntelligentOffice(unittest.TestCase):
 	@patch.object(GPIO, "input")
 	def test_check(self, mock_object:Mock):
