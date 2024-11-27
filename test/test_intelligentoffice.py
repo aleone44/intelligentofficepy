@@ -109,6 +109,16 @@ class TestIntelligentOffice(unittest.TestCase):
 		mock_gpio_output.assert_called_with(29, True)
 		self.assertTrue(io.light_on)
 
+	@patch.object(VEML7700, 'lux', new_callable=int)
+	@patch.object(GPIO, 'output')
+	@patch.object(IntelligentOffice, 'is_office_empty', return_value=False)  # Mock per l'ufficio non vuoto
+	def test_manage_light_level_office_not_empty(self, mock_is_office_empty, mock_gpio_output, mock_lux):
+		io = IntelligentOffice()
+		mock_lux = 300
+		io.light_on = False
+		io.manage_light_level()
+		mock_gpio_output.assert_called_with(29, True)
+		self.assertTrue(io.light_on)
 
 
 
