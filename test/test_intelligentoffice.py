@@ -14,6 +14,7 @@ class TestIntelligentOffice(unittest.TestCase):
 		pass
 
 
+
 	@patch.object(GPIO, "input")
 	def test_check_quadrant_occupancy_first_side(self, mock_object: Mock):
 		io= IntelligentOffice()
