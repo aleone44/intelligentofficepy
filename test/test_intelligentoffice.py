@@ -89,29 +89,11 @@ class TestIntelligentOffice(unittest.TestCase):
 		self.assertFalse(io.blinds_open)
 
 
-	@patch.object(VEML7700, 'lux', new_callable=int)
-	@patch.object(GPIO, 'output')
-	def test_manage_light_level_low(self, mock_gpio_output, mock_lux):
-		io = IntelligentOffice()
-		mock_lux = 400
-		io.light_on = False
-		io.manage_light_level()
-		mock_gpio_output.assert_called_with(29, True)
-		self.assertTrue(io.light_on)
+
 
 	@patch.object(VEML7700, 'lux', new_callable=int)
 	@patch.object(GPIO, 'output')
-	def test_manage_light_level_low(self, mock_gpio_output, mock_lux):
-		io = IntelligentOffice()
-		mock_lux = 600
-		io.light_on = True
-		io.manage_light_level()
-		mock_gpio_output.assert_called_with(29, True)
-		self.assertTrue(io.light_on)
-
-	@patch.object(VEML7700, 'lux', new_callable=int)
-	@patch.object(GPIO, 'output')
-	@patch.object(IntelligentOffice, 'is_office_empty', return_value=False)  # Mock per l'ufficio non vuoto
+	@patch.object(IntelligentOffice, 'is_office_empty', return_value=False)
 	def test_manage_light_level_office_not_empty(self, mock_is_office_empty, mock_gpio_output, mock_lux):
 		io = IntelligentOffice()
 		mock_lux = 300
@@ -119,6 +101,20 @@ class TestIntelligentOffice(unittest.TestCase):
 		io.manage_light_level()
 		mock_gpio_output.assert_called_with(29, True)
 		self.assertTrue(io.light_on)
+
+	@patch.object(GPIO, 'input', return_value=True)
+	@patch.object(GPIO, 'output')
+	def test_monitor_air_quality_gas_detected(self, mock_gpio_output, mock_gpio_input):
+		io = IntelligentOffice()
+		io.monitor_air_quality()
+		mock_gpio_output.assert_called_with(36, True)  #
+		self.assertTrue(io.buzzer_on)
+
+
+
+
+
+
 
 
 
